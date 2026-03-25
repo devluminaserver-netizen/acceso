@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cargando Sistema...</title>
+    <style>body { background-color: #0f172a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; }</style>
+</head>
+<body>
+    <div id="mensaje">Conectando con el servidor seguro...</div>
+
+    <script>
+        // Tu URL de Google Script integrada
+        const URL_API = "https://script.google.com/macros/s/AKfycbznQW19TVHkV11hBtMzRibgxctaODH1KBdNxmmYGR4j_ELq4T-9imX5OzSIRYCBCMQB/exec";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const idSistema = urlParams.get('id');
+
+        if(idSistema) {
+            fetch(URL_API + "?id=" + idSistema)
+            .then(respuesta => respuesta.json())
+            .then(datos => {
+                if(datos.success) {
+                    document.open();
+                    document.write(datos.html);
+                    document.close();
+                } else {
+                    document.getElementById('mensaje').innerText = "Error: " + datos.mensaje;
+                }
+            }).catch(() => document.getElementById('mensaje').innerText = "Error de conexión.");
+        } else {
+            document.getElementById('mensaje').innerText = "Acceso Denegado. Faltan credenciales en el enlace.";
+        }
+    </script>
+</body>
+</html>
